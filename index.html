@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surv Card Price Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateY(1rem);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        body {
+            background-color: #6A9ACD; /* Updated background color */
+        }
+
+        /* Enhanced header styling */
+    </style>
+</head>
+<body>
+<div class="container mx-auto px-4 py-2 max-w-md">
+    <img src="surv-logo-blackalt.png" alt="Surv Logo" class="logo">
+
+    <!-- Enhanced Header with additional styling -->
+    <h1 class="text-4xl font-bold text-center mb-6 shadow-md p-3 rounded-lg bg-blue-500 text-white">Card Price Calculator</h1>
+    <!-- Increased spacing from header to calculate/result sections -->
+    <div class="mt-16">
+        <form id="priceForm" class="bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label for="cashPrice" class="block text-gray-700 text-lg font-bold mb-2">Enter Cash Price:</label>
+                <input type="number" id="cashPrice" step="0.01" min="0" placeholder="Cash Price" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg">
+            </div>
+            <div class="flex justify-center">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform hover:scale-105 transition duration-300 ease-in-out">Calculate</button>
+            </div>
+        </form>
+        <div id="result" class="text-center p-6 bg-blue-100 rounded-md text-blue-900 font-bold hidden animate-slide-in text-xl"></div>
+    </div>
+</div>
+<script src="script.js"></script>
+<script>
+    document.getElementById('priceForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent form from submitting normally
+
+        // Get the user input
+        const cashPrice = parseFloat(document.getElementById('cashPrice').value);
+
+        if (isNaN(cashPrice)) {
+            alert("Please enter a valid number");
+            return;
+        }
+
+        // Correctly apply the 1.04% increase
+        let cardPrice = roundUpToNearestPenny(cashPrice * 1.04);
+
+        // Display the result with animation
+        const resultElement = document.getElementById('result');
+        resultElement.textContent = `Card Price: $${cardPrice.toFixed(2)}`;
+        resultElement.classList.remove('hidden', 'animate-slide-in');
+        void resultElement.offsetWidth; // Trigger reflow to restart animation
+        resultElement.classList.add('animate-slide-in');
+    });
+
+    function roundUpToNearestPenny(amount) {
+        return Math.ceil(amount * 100) / 100;
+    }
+</script>
+</body>
+</html>
